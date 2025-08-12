@@ -1,5 +1,10 @@
 #importes
 import os 
+import random
+
+#dict
+db = {
+}
 
 #Menus
 def menu():
@@ -29,7 +34,8 @@ def menu_solicitud_productos():
 
 #1 Cuenta de ahorros
 #2 Cuenta corriente
-#3 salir
+#3 CDT
+#4 salir
 
 Seleccione una opcion: ''')
 
@@ -94,19 +100,67 @@ def menu_cancelar():
 
 #1 Cuenta de ahorros
 #2 Cuenta corriente
-#3 salir
+#3 CDT
+#4 salir
 
 Seleccione una opcion: ''')
 
+#logica
+#funciones logicas
+def registro_user():
+    os.system('cls')
+    acc = True
+    nombre = input('Ingrese el nombre completo: ')
+    dni = input('Ingrese el numero de documento: ')
+    email = input('Ingrese el correo electronico: ')
+    movil = input('Ingrese el numero de telefono: ')
+    fijo = input('Ingrese el numero de telefono fijo: ')
+    pais = input('Ingrese el pais de residencia: ')
+    dep = input('Ingrese el departamento de residencia: ')
+    ciudad = input('Ingrese la ciudad o municipio de residencia: ')
+    dirc = input('Ingrese la direccion de residencia: ')
+    
+    while acc:
+        acc_num = random.randint(0,10000)
 
+        if acc_num  in db.keys():
+            acc = True
+        else:
+            acc = False
+    
+    db[acc_num] = {
+        'nombre': nombre,
+        'dni': dni,
+        'email': email,
+        'contacto': {
+            'movil': movil,
+            'fijo': fijo
+        },
+        'ubicacion' : {
+            'pais': pais,
+            'departamento': dep,
+            'ciudad': ciudad,
+            'direccion': dirc
+            }
+        }
+    print(f'Usuario creado con exito, su numero de usuario es: {acc_num}')
+    input('oprima enter para continuar')
+
+#inicio de programa
 while True:
     try:
         match int(menu()):
             case 1:
-                pass
+                registro_user()
             case 2:
                 match int(menu_solicitud_productos()):
                     case 1:
+                        pass
+                    case 2:
+                        pass
+                    case 3:
+                        pass
+                    case 4:
                         pass
             case 3:
                 match int(menu_depositos()):
@@ -151,6 +205,8 @@ while True:
                     case 2: 
                         pass
                     case 3:
+                        pass
+                    case 4:
                         pass
             case 8:
                 break
