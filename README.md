@@ -16,4 +16,8 @@ Python 3.12.0
 
 Windows
 
-  
+# Estructura de archivos
+
+README.md
+
+main.py

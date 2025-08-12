@@ -1,20 +1,102 @@
+#importes
+import os 
+
+#Menus
 def menu():
-    pass
+    os.system("cls")
+    a = input('''
+  SISTEMA DE GESTION BANCARIA
+===============================
+
+#1 Registro de cliente
+#2 Solicitud Productos
+#3 Deposito a cuentas
+#4 Solicitud de creditos
+#5 Retiros de cuentas
+#6 Pagos a creditos
+#7 Cerrar cuenta
+#8 Salir
+
+Seleccione una opcion: ''')
+    
+    return a
+
+def menu_solicitud_productos():
+    os.system("cls")
+    a = input('''
+  SOLICITUD DE PRODUCTOS
+==========================
+
+#1 Cuenta de ahorros
+#2 Cuenta corriente
+#3 salir
+
+Seleccione una opcion: ''')
 
 def menu_depositos():
-    pass
+    os.system('cls')
+    a = input('''
+  DEPOSITOS A CUENTAS
+=======================
+
+#1 Cuenta de ahorros
+#2 Cuenta corriente
+#3 salir
+
+Seleccione una opcion: ''')
+    return a
 
 def menu_creditos():
-    pass
+    os.system('cls')
+    a = input('''
+  SOLICITUD DE CREDITOS
+=========================
 
-def menu_pago_creditos():
-    pass
+#1 Credito de libre inversion
+#2 Credito de vivienda
+#3 Credito vehicular
+#4 Salir
+
+Seleccione una opcion: ''')
+    return a
 
 def menu_retiros():
-    pass
+    os.system('cls')
+    a = input('''
+  RETIROS
+===========
+
+#1 Cuenta de ahorros
+#2 Cuenta corriente
+#3 salir
+
+Seleccione una opcion: ''')
+    return a
+
+def menu_pago_creditos():
+    os.system('cls')
+    a = input('''
+  PAGO DE CREDITOS
+=====================
+
+#1 Credito de libre inversion
+#2 Credito de vivienda
+#3 Credito 
+#4 Salir
+
+Seleccione una opcion: ''')
+    return a
 
 def menu_cancelar():
-    pass
+    a = input('''
+  CANCELAR CUENTA O PRODUCTOS
+===============================
+
+#1 Cuenta de ahorros
+#2 Cuenta corriente
+#3 salir
+
+Seleccione una opcion: ''')
 
 
 while True:
@@ -23,6 +105,10 @@ while True:
             case 1:
                 pass
             case 2:
+                match int(menu_solicitud_productos()):
+                    case 1:
+                        pass
+            case 3:
                 match int(menu_depositos()):
                     case 1:
                         pass
@@ -30,7 +116,7 @@ while True:
                         pass
                     case 3:
                         pass
-            case 3:
+            case 4:
                 match int(menu_creditos()):
                     case 1:
                         pass
@@ -40,7 +126,7 @@ while True:
                         pass
                     case 4:
                         pass
-            case 4:
+            case 5:
                 match int(menu_retiros()):
                     case 1:
                         pass
@@ -48,7 +134,7 @@ while True:
                         pass
                     case 3:
                         pass
-            case 5:
+            case 6:
                 match int(menu_pago_creditos()):
                     case 1:
                         pass
@@ -58,7 +144,7 @@ while True:
                         pass
                     case 4:
                         pass
-            case 6:
+            case 7:
                 match int(menu_cancelar()):
                     case 1:
                         pass
@@ -66,7 +152,7 @@ while True:
                         pass
                     case 3:
                         pass
-            case 7:
+            case 8:
                 break
     except:
-        pass
+        continue
