@@ -5,7 +5,7 @@ import time
 
 #dict
 db = { 
-    7086 : {'cuentas' : {}, 'creditos' : {} }
+    # 7086 : {'cuentas' : {}, 'creditos' : {} }
 }
 
 #Menus
@@ -44,7 +44,6 @@ Seleccione una opcion: ''')
 
 def menu_depositos():
     os.system('cls')
-    print(db[numero_user]['cuentas'])
     a = input('''
   DEPOSITOS A CUENTAS
 =======================
@@ -59,7 +58,6 @@ Seleccione una opcion: ''')
 
 def menu_creditos():
     os.system('cls')
-    print(db[numero_user]['creditos'])
     a = input('''
   SOLICITUD DE CREDITOS
 =========================
@@ -93,7 +91,7 @@ def menu_pago_creditos():
 
 #1 Credito de libre inversion
 #2 Credito de vivienda
-#3 Credito 
+#3 Credito vehicular
 #4 Salir
 
 Seleccione una opcion: ''')
@@ -241,61 +239,106 @@ Su saldo del CDT estimado a 1 año al 12% anual es: {v_t}''')
 #depositos 
 def deposito_ahorros():
     os.system('cls')
-    a = int(input('Ingrese el numero de cuenta: '))
+    
+    if len(db[numero_user]['cuentas']) == 0:
+        print("No tiene cuentas registradas")
+        input("Presione enter para continuar...")
+        return
+    
+    print("Cuentas de ahorro disponibles:")
+    for cuenta, saldo in db[numero_user]['cuentas'].items():
+        if 100 <= cuenta <= 199:
+            print(f"Cuenta: {cuenta} - Saldo actual: ${saldo}")
+    
+    a = int(input('\nIngrese el numero de cuenta: '))
     
     if a >= 100 and a <= 199:
         if a in db[numero_user]['cuentas'].keys():
-            db[numero_user]['cuentas'][a] += int(input('Ingrese el monto a depositar: '))
-            print('Deposito exitoso')
-            time.sleep(1)
+            monto = int(input('Ingrese el monto a depositar: $'))
+            if monto > 0:
+                db[numero_user]['cuentas'][a] += monto
+                print(f'Deposito exitoso de ${monto}')
+                print(f'Nuevo saldo en cuenta {a}: ${db[numero_user]["cuentas"][a]}')
+                input("Presione enter para continuar...")
+            else:
+                print("El monto debe ser mayor a 0")
+                input("Presione enter para continuar...")
         else:
             print(f'La cuenta de ahorros {a} no esta asociada a {numero_user}')
-            time.sleep(1)
+            input("Presione enter para continuar...")
     else:
-            print(f'La cuenta de ahorros {a} no existe')
-            time.sleep(1)
+        print(f'La cuenta de ahorros {a} no existe (debe ser entre 100-199)')
+        input("Presione enter para continuar...")
 
 def deposito_corriente():
     os.system('cls')
-    a = int(input('Ingrese el numero de cuenta: '))
+    
+    if len(db[numero_user]['cuentas']) == 0:
+        print("No tiene cuentas registradas")
+        input("Presione enter para continuar...")
+        return
+    
+    print("Cuentas corrientes disponibles:")
+    for cuenta, saldo in db[numero_user]['cuentas'].items():
+        if 200 <= cuenta <= 299:
+            print(f"Cuenta: {cuenta} - Saldo actual: ${saldo}")
+    
+    a = int(input('\nIngrese el numero de cuenta: '))
     
     if a >= 200 and a <= 299:
         if a in db[numero_user]['cuentas'].keys():
-            db[numero_user]['cuentas'][a] += int(input('Ingrese el monto a depositar: '))
-            print('Deposito exitoso')
-            time.sleep(1)
+            monto = int(input('Ingrese el monto a depositar: $'))
+            if monto > 0:
+                db[numero_user]['cuentas'][a] += monto
+                print(f'Deposito exitoso de ${monto}')
+                print(f'Nuevo saldo en cuenta {a}: ${db[numero_user]["cuentas"][a]}')
+                input("Presione enter para continuar...")
+            else:
+                print("El monto debe ser mayor a 0")
+                input("Presione enter para continuar...")
         else:
-            print(f'La cuenta corriente {a} no esta asociada')
-            time.sleep(1)
+            print(f'La cuenta corriente {a} no esta asociada a {numero_user}')
+            input("Presione enter para continuar...")
     else:
-            print(f'La cuenta corriente {a} no existe')
-            time.sleep(1)
+        print(f'La cuenta corriente {a} no existe (debe ser entre 200-299)')
+        input("Presione enter para continuar...")
 
 def deposito_CDT():
     os.system('cls')
-    a = int(input('Ingrese el numero de cuenta: '))
+    
+    if len(db[numero_user]['cuentas']) == 0:
+        print("No tiene cuentas registradas")
+        input("Presione enter para continuar...")
+        return
+    
+    print("Cuentas CDT disponibles:")
+    for cuenta, saldo in db[numero_user]['cuentas'].items():
+        if 300 <= cuenta <= 399:
+            print(f"Cuenta: {cuenta} - Saldo actual: ${saldo}")
+    
+    a = int(input('\nIngrese el numero de cuenta: '))
     
     if a >= 300 and a <= 399:
         if a in db[numero_user]['cuentas'].keys():
-            inv = int(input('Ingrese el valor de la inversion: '))
-    
-            v_g = inv * 0.12
-            v_t = inv + v_g
-            
-            db[numero_user]['cuentas'][a] += v_t
-            
-            print(f'''Deposito exitoso 
-
+            inv = int(input('Ingrese el valor de la inversion: $'))
+            if inv > 0:
+                v_g = inv * 0.12
+                v_t = inv + v_g
+                
+                db[numero_user]['cuentas'][a] += v_t
+                
+                print(f'''Deposito exitoso 
 Su saldo del CDT estimado a 1 año al 12% anual es: {db[numero_user]['cuentas'][a]}''')
-            input('Precione enter para continuar...')
-            
-            time.sleep(2)
+                input("Presione enter para continuar...")
+            else:
+                print("El monto debe ser mayor a 0")
+                input("Presione enter para continuar...")
         else:
-            print(f'La cuenta CDT {a} no esta asociada')
-            time.sleep(1)
+            print(f'La cuenta CDT {a} no esta asociada a {numero_user}')
+            input("Presione enter para continuar...")
     else:
-            print(f'La cuenta CDT {a} no existe')
-            time.sleep(1)
+        print(f'La cuenta CDT {a} no existe (debe ser entre 300-399)')
+        input("Presione enter para continuar...")
 
 #logica creditos
 def credito_libre_inv():
@@ -392,40 +435,30 @@ def retiro_cuenta_ahorro():
         if 100 <= cuenta <= 199:
             print(f"Cuenta: {cuenta} - Saldo: ${saldo}")
     
-    try:
-        acc_num = int(input('\nIngrese el numero de cuenta de ahorros: '))
-        
-        if acc_num < 100 or acc_num > 199:
-            print("Numero de cuenta invalido. Las cuentas de ahorro son del 100 al 199")
-            input("Presione enter para continuar...")
-            return
-            
-        if acc_num not in db[numero_user]['cuentas'].keys():
-            print(f'La cuenta de ahorros {acc_num} no existe')
-            input("Presione enter para continuar...")
-            return
-            
-        monto = int(input('Ingrese el monto a retirar: $'))
-        
-        if monto <= 0:
-            print("El monto debe ser mayor a 0")
-            input("Presione enter para continuar...")
-            return
-            
-        if monto > db[numero_user]['cuentas'][acc_num]:
-            print(f'Saldo insuficiente. Saldo actual: ${db[numero_user]["cuentas"][acc_num]}')
-            input("Presione enter para continuar...")
-            return
-            
-        db[numero_user]['cuentas'][acc_num] -= monto
-        print(f'Retiro exitoso de ${monto}')
-        print(f'Nuevo saldo en cuenta {acc_num}: ${db[numero_user]["cuentas"][acc_num]}')
+    acc_num = int(input('\nIngrese el numero de cuenta de ahorros: '))
+    
+    if acc_num < 100 or acc_num > 199:
+        print("Numero de cuenta invalido. Las cuentas de ahorro son del 100 al 199")
         input("Presione enter para continuar...")
+        return
         
-    except ValueError:
-        print("Por favor ingrese valores numericos validos")
+    if acc_num not in db[numero_user]['cuentas'].keys():
+        print(f'La cuenta de ahorros {acc_num} no existe')
         input("Presione enter para continuar...")
-
+        return
+        
+    monto = int(input('Ingrese el monto a retirar: $'))
+        
+    if monto > db[numero_user]['cuentas'][acc_num]:
+        print(f'Saldo insuficiente. Saldo actual: ${db[numero_user]["cuentas"][acc_num]}')
+        input("Presione enter para continuar...")
+        return
+        
+    db[numero_user]['cuentas'][acc_num] -= monto
+    print(f'Retiro exitoso de ${monto}')
+    print(f'Nuevo saldo en cuenta {acc_num}: ${db[numero_user]["cuentas"][acc_num]}')
+    input("Presione enter para continuar...")
+        
 def retiro_cuenta_corriente():
     os.system('cls')
     
@@ -434,48 +467,35 @@ def retiro_cuenta_corriente():
         input("Presione enter para continuar...")
         return
     
-    print("Cuentas corrientes disponibles:")
+    print("Cuentas de ahorro disponibles:")
     for cuenta, saldo in db[numero_user]['cuentas'].items():
-        if 200 <= cuenta <= 299:
+        if 100 <= cuenta <= 199:
             print(f"Cuenta: {cuenta} - Saldo: ${saldo}")
     
-    try:
-        acc_num = int(input('\nIngrese el numero de cuenta corriente: '))
-        
-        if acc_num < 200 or acc_num > 299:
-            print("Numero de cuenta invalido. Las cuentas corrientes son del 200 al 299")
-            input("Presione enter para continuar...")
-            return
-            
-        if acc_num not in db[numero_user]['cuentas'].keys():
-            print(f'La cuenta corriente {acc_num} no existe')
-            input("Presione enter para continuar...")
-            return
-            
-        monto = int(input('Ingrese el monto a retirar: $'))
-        
-        if monto <= 0:
-            print("El monto debe ser mayor a 0")
-            input("Presione enter para continuar...")
-            return
-            
-        if monto > db[numero_user]['cuentas'][acc_num]:
-            print(f'Saldo insuficiente. Saldo actual: ${db[numero_user]["cuentas"][acc_num]}')
-            input("Presione enter para continuar...")
-            return
-            
-        db[numero_user]['cuentas'][acc_num] -= monto
-        print(f'Retiro exitoso de ${monto}')
-        print(f'Nuevo saldo en cuenta {acc_num}: ${db[numero_user]["cuentas"][acc_num]}')
+    acc_num = int(input('\nIngrese el numero de cuenta de ahorros: '))
+    
+    if acc_num < 100 or acc_num > 199:
+        print("Numero de cuenta invalido. Las cuentas de ahorro son del 100 al 199")
         input("Presione enter para continuar...")
+        return
         
-    except ValueError:
-        print("Por favor ingrese valores numericos validos")
+    if acc_num not in db[numero_user]['cuentas'].keys():
+        print(f'La cuenta de ahorros {acc_num} no existe')
         input("Presione enter para continuar...")
-                
-    
-    
-    
+        return
+        
+    monto = int(input('Ingrese el monto a retirar: $'))
+        
+    if monto > db[numero_user]['cuentas'][acc_num]:
+        print(f'Saldo insuficiente. Saldo actual: ${db[numero_user]["cuentas"][acc_num]}')
+        input("Presione enter para continuar...")
+        return
+        
+    db[numero_user]['cuentas'][acc_num] -= monto
+    print(f'Retiro exitoso de ${monto}')
+    print(f'Nuevo saldo en cuenta {acc_num}: ${db[numero_user]["cuentas"][acc_num]}')
+    input("Presione enter para continuar...")
+
 #inicio de programa
 while True:
     try:
@@ -530,15 +550,17 @@ while True:
                         case 3:
                             break
             case 6:
-                match int(menu_pago_creditos()):
-                    case 1:
-                        pass
-                    case 2: 
-                        pass
-                    case 3:
-                        pass
-                    case 4:
-                        pass
+                filtro_user()
+                while True:
+                    match int(menu_pago_creditos()):
+                        case 1:
+                            pago_credito_libre_inversion()
+                        case 2: 
+                            pago_credito_vivienda()
+                        case 3:
+                            pago_credito_vehicular()
+                        case 4:
+                            break
             case 7:
                 match int(menu_cancelar()):
                     case 1:
@@ -553,4 +575,6 @@ while True:
                 os.system('cls')
                 break
     except ValueError:
+        print("Por favor ingrese un número válido.")
+        time.sleep(1)
         continue
