@@ -4,7 +4,8 @@ import random
 import time
 
 #dict
-db = { 7086 : {'cuentas' : {}}
+db = { 
+    7086 : {'cuentas' : {}, 'creditos' : {} }
 }
 
 #Menus
@@ -43,7 +44,7 @@ Seleccione una opcion: ''')
 
 def menu_depositos():
     os.system('cls')
-    print(db)
+    print(db[numero_user]['cuentas'])
     a = input('''
   DEPOSITOS A CUENTAS
 =======================
@@ -58,6 +59,7 @@ Seleccione una opcion: ''')
 
 def menu_creditos():
     os.system('cls')
+    print(db[numero_user]['creditos'])
     a = input('''
   SOLICITUD DE CREDITOS
 =========================
@@ -98,6 +100,7 @@ Seleccione una opcion: ''')
     return a
 
 def menu_cancelar():
+    os.system('cls')
     a = input('''
   CANCELAR CUENTA O PRODUCTOS
 ===============================
@@ -108,7 +111,7 @@ def menu_cancelar():
 #4 salir
 
 Seleccione una opcion: ''')
-
+    return a
 #logica
 #funciones logicas
 def registro_user():
@@ -173,6 +176,7 @@ def filtro_user():
 
 #agregar cuentas
 def add_acc_ahorro():
+    os.system('cls')
     while True:
         num_acc = random.randint(100, 199)
         if num_acc in db[numero_user]['cuentas'].keys():
@@ -197,10 +201,16 @@ def add_acc_corriente():
         if num_acc in db[numero_user]['cuentas'].keys():
             continue
         else: 
-            db[numero_user]['cuentas'] = {num_acc : 0}
-            print(f'Cuenta corriente creada con exito, el numero de cuenta es: {num_acc}')
-            input('Precione enter para continuar...')
-            break
+            if len(db[numero_user]['cuentas'].keys()) == 0:
+                db[numero_user]['cuentas'] = {num_acc : 0}
+                print(f'Cuenta corriente creada con exito, el numero de cuenta es: {num_acc}')
+                input('Precione enter para continuar...')
+                break
+            else:
+                db[numero_user]['cuentas'][num_acc] = 0
+                print(f'Cuenta corriente creada con exito, el numero de cuenta es: {num_acc}')
+                input('Precione enter para continuar...')
+                break
         
 def add_CDT():
     os.system('cls')
@@ -215,11 +225,18 @@ def add_CDT():
         if num_acc in db[numero_user]['cuentas'].keys():
             continue
         else:
-            db[numero_user]['cuentas'] = {num_acc : v_t}
-            print(f'''Cuenta de CDT creado con exito, el numero de cuenta es: {num_acc}
+            if len(db[numero_user]['cuentas'].keys()) == 0:
+                db[numero_user]['cuentas'] = {num_acc : v_t}
+                print(f'''Cuenta de CDT creado con exito, el numero de cuenta es: {num_acc}
 Su saldo del CDT estimado a 1 año al 12% anual es: {v_t}''')
-            input('Precione enter para continuar...')
-            break
+                input('Precione enter para continuar...')
+                break
+            else:
+                db[numero_user]['cuentas'][num_acc] = v_t
+                print(f'''Cuenta de CDT creado con exito, el numero de cuenta es: {num_acc}
+Su saldo del CDT estimado a 1 año al 12% anual es: {v_t}''')
+                input('Precione enter para continuar...')
+                break
 
 #depositos 
 def deposito_ahorros():
@@ -279,6 +296,87 @@ Su saldo del CDT estimado a 1 año al 12% anual es: {db[numero_user]['cuentas'][
     else:
             print(f'La cuenta CDT {a} no existe')
             time.sleep(1)
+
+#logica creditos
+def credito_libre_inv():
+    os.system('cls')
+    cant = int(input(f'Ingresa el valor del credito solicitado: '))
+    
+    while True:
+        num_acc = random.randint(1000, 1999)
+        
+        if num_acc in db[numero_user]['creditos'].keys():
+            continue
+        elif len(db[numero_user]['creditos']) < 5:
+            if len(db[numero_user]['creditos']) == 0:
+                db[numero_user]['creditos'] = {num_acc : cant}
+                print(f'El credito fue aprobado, numero de credito: {num_acc}')
+                input('Precione enter para continuar...')
+                time.sleep(1)
+                break
+            else:
+                db[numero_user]['creditos'][num_acc] = cant
+                print(f'El credito fue aprobado, numero de credito: {num_acc}')
+                input('Precione enter para continuar...')
+                time.sleep(1)
+                break
+        else:
+            print('No se puede solicitar mas de 5 creditos')
+            time.sleep(1)
+            break
+
+def credito_vivienda():
+    os.system('cls')
+    cant = int(input(f'Ingresa el valor del credito solicitado: '))
+    
+    while True:
+        num_acc = random.randint(2000, 2999)
+        
+        if num_acc in db[numero_user]['creditos'].keys():
+            continue
+        elif len(db[numero_user]['creditos']) < 5:
+            if len(db[numero_user]['creditos']) == 0:
+                db[numero_user]['creditos'] = {num_acc : cant}
+                print(f'El credito fue aprobado, numero de credito: {num_acc}')
+                input('Precione enter para continuar...')
+                time.sleep(1)
+                break
+            else:
+                db[numero_user]['creditos'][num_acc] = cant
+                print(f'El credito fue aprobado, numero de credito: {num_acc}')
+                input('Precione enter para continuar...')
+                time.sleep(1)
+                break
+        else:
+            print('No se puede solicitar mas de 5 creditos')
+            time.sleep(1)
+            break
+def credito_vehicular():
+    os.system('cls')
+    cant = int(input(f'Ingresa el valor del credito solicitado: '))
+    
+    while True:
+        num_acc = random.randint(3000, 3999)
+        
+        if num_acc in db[numero_user]['creditos'].keys():
+            continue
+        elif len(db[numero_user]['creditos']) < 5:
+            if len(db[numero_user]['creditos']) == 0:
+                db[numero_user]['creditos'] = {num_acc : cant}
+                print(f'El credito fue aprobado, numero de credito: {num_acc}')
+                input('Precione enter para continuar...')
+                time.sleep(1)
+                break
+            else:
+                db[numero_user]['creditos'][num_acc] = cant
+                print(f'El credito fue aprobado, numero de credito: {num_acc}')
+                input('Precione enter para continuar...')
+                time.sleep(1)
+                break
+        else:
+            print('No se puede solicitar mas de 5 creditos')
+            time.sleep(1)
+            break
 #inicio de programa
 while True:
     try:
@@ -311,15 +409,17 @@ while True:
                             break
                         
             case 4:
-                match int(menu_creditos()):
-                    case 1:
-                        pass
-                    case 2: 
-                        pass
-                    case 3:
-                        pass
-                    case 4:
-                        pass
+                filtro_user()
+                while True:
+                    match int(menu_creditos()):
+                        case 1:
+                            credito_libre_inv()
+                        case 2: 
+                            credito_vivienda()
+                        case 3:
+                            credito_vehicular()
+                        case 4:
+                            break
             case 5:
                 match int(menu_retiros()):
                     case 1:
