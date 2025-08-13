@@ -43,13 +43,15 @@ Seleccione una opcion: ''')
 
 def menu_depositos():
     os.system('cls')
+    print(db)
     a = input('''
   DEPOSITOS A CUENTAS
 =======================
 
 #1 Cuenta de ahorros
 #2 Cuenta corriente
-#3 salir
+#3 CDT
+#4 salir
 
 Seleccione una opcion: ''')
     return a
@@ -145,39 +147,50 @@ def registro_user():
             'direccion': dirc
             },
         'cuentas' : {
+        },
+        'creditos' : {
         }
-        
         
         }
     print(f'Usuario creado con exito, su numero de usuario es: {acc_num}')
     input('oprima enter para continuar')
 
 #filtro de usuarios
-def filtro_user(a, func):    
-    if a in db.keys():
-        print('Usuario encontrado')
-        
-    else:
-        print('Usuario no existe, intente de nuevo')
-        time.sleep(1)
-        func()
+def filtro_user():    
+    global numero_user
+    os.system('cls')            
+    numero_user = int(input('Ingrese el numero de usuario: '))
+    
+    while True:
+        if numero_user in db.keys():
+            print('Usuario encontrado')
+            break
+        else:
+            print('Usuario no existe, intente de nuevo')
+            time.sleep(1)
+            numero_user = int(input('Ingrese el numero de usuario: '))
+
 
 #agregar cuentas
 def add_acc_ahorro():
-    filtro_user(numero_user, add_acc_ahorro)
     while True:
         num_acc = random.randint(100, 199)
         if num_acc in db[numero_user]['cuentas'].keys():
             continue
-        else: 
-            db[numero_user]['cuentas'] = {num_acc : 0}
-            print(f'Cuenta de ahorros creada con exito, el numero de cuenta es: {num_acc}')
-            input('Precione enter para continuar...')
-            break
+        else:   
+            if len(db[numero_user]['cuentas'].keys()) == 0:
+                db[numero_user]['cuentas'] = {num_acc : 0}
+                print(f'Cuenta de ahorros creada con exito, el numero de cuenta es: {num_acc}')
+                input('Precione enter para continuar...')
+                break
+            else:
+                db[numero_user]['cuentas'][num_acc] = 0
+                print(f'Cuenta de ahorros creada con exito, el numero de cuenta es: {num_acc}')
+                input('Precione enter para continuar...')
+                break
     
 def add_acc_corriente():
     os.system('cls')
-    filtro_user(numero_user, add_acc_corriente)
     
     while True:
         num_acc = random.randint(200, 299)
@@ -188,10 +201,11 @@ def add_acc_corriente():
             print(f'Cuenta corriente creada con exito, el numero de cuenta es: {num_acc}')
             input('Precione enter para continuar...')
             break
+        
 def add_CDT():
     os.system('cls')
-    filtro_user(numero_user, add_CDT)
     inv = int(input('Ingrese el valor de la inversion: '))
+    
     
     v_g = inv * 0.12
     v_t = inv + v_g
@@ -207,6 +221,64 @@ Su saldo del CDT estimado a 1 año al 12% anual es: {v_t}''')
             input('Precione enter para continuar...')
             break
 
+#depositos 
+def deposito_ahorros():
+    os.system('cls')
+    a = int(input('Ingrese el numero de cuenta: '))
+    
+    if a >= 100 and a <= 199:
+        if a in db[numero_user]['cuentas'].keys():
+            db[numero_user]['cuentas'][a] += int(input('Ingrese el monto a depositar: '))
+            print('Deposito exitoso')
+            time.sleep(1)
+        else:
+            print(f'La cuenta de ahorros {a} no esta asociada a {numero_user}')
+            time.sleep(1)
+    else:
+            print(f'La cuenta de ahorros {a} no existe')
+            time.sleep(1)
+
+def deposito_corriente():
+    os.system('cls')
+    a = int(input('Ingrese el numero de cuenta: '))
+    
+    if a >= 200 and a <= 299:
+        if a in db[numero_user]['cuentas'].keys():
+            db[numero_user]['cuentas'][a] += int(input('Ingrese el monto a depositar: '))
+            print('Deposito exitoso')
+            time.sleep(1)
+        else:
+            print(f'La cuenta corriente {a} no esta asociada')
+            time.sleep(1)
+    else:
+            print(f'La cuenta corriente {a} no existe')
+            time.sleep(1)
+
+def deposito_CDT():
+    os.system('cls')
+    a = int(input('Ingrese el numero de cuenta: '))
+    
+    if a >= 300 and a <= 399:
+        if a in db[numero_user]['cuentas'].keys():
+            inv = int(input('Ingrese el valor de la inversion: '))
+    
+            v_g = inv * 0.12
+            v_t = inv + v_g
+            
+            db[numero_user]['cuentas'][a] += v_t
+            
+            print(f'''Deposito exitoso 
+
+Su saldo del CDT estimado a 1 año al 12% anual es: {db[numero_user]['cuentas'][a]}''')
+            input('Precione enter para continuar...')
+            
+            time.sleep(2)
+        else:
+            print(f'La cuenta CDT {a} no esta asociada')
+            time.sleep(1)
+    else:
+            print(f'La cuenta CDT {a} no existe')
+            time.sleep(1)
 #inicio de programa
 while True:
     try:
@@ -214,9 +286,7 @@ while True:
             case 1:
                 registro_user()
             case 2:
-                global numero_user
-                os.system('cls')
-                numero_user = int(input('Ingrese el numero de usuario: '))
+                filtro_user()
                 while True:    
                     match int(menu_solicitud_productos()):
                         case 1:
@@ -228,16 +298,18 @@ while True:
                         case 4:
                             break
             case 3:
-                os.system('cls')
-                numero_user = int(input('Ingrese el numero de usuario: '))
+                filtro_user()
                 while True: 
                     match int(menu_depositos()):
                         case 1:
-                            pass
+                            deposito_ahorros()
                         case 2: 
-                            pass
+                            deposito_corriente()
                         case 3:
+                            deposito_CDT()
+                        case 4:
                             break
+                        
             case 4:
                 match int(menu_creditos()):
                     case 1:
@@ -277,6 +349,7 @@ while True:
                     case 4:
                         pass
             case 8:
+                os.system('cls')
                 break
     except ValueError:
         continue
