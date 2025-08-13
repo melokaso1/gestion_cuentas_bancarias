@@ -377,6 +377,105 @@ def credito_vehicular():
             print('No se puede solicitar mas de 5 creditos')
             time.sleep(1)
             break
+        
+#retiros cuentas
+def retiro_cuenta_ahorro():
+    os.system('cls')
+    
+    if len(db[numero_user]['cuentas']) == 0:
+        print("No tiene cuentas registradas")
+        input("Presione enter para continuar...")
+        return
+    
+    print("Cuentas de ahorro disponibles:")
+    for cuenta, saldo in db[numero_user]['cuentas'].items():
+        if 100 <= cuenta <= 199:
+            print(f"Cuenta: {cuenta} - Saldo: ${saldo}")
+    
+    try:
+        acc_num = int(input('\nIngrese el numero de cuenta de ahorros: '))
+        
+        if acc_num < 100 or acc_num > 199:
+            print("Numero de cuenta invalido. Las cuentas de ahorro son del 100 al 199")
+            input("Presione enter para continuar...")
+            return
+            
+        if acc_num not in db[numero_user]['cuentas'].keys():
+            print(f'La cuenta de ahorros {acc_num} no existe')
+            input("Presione enter para continuar...")
+            return
+            
+        monto = int(input('Ingrese el monto a retirar: $'))
+        
+        if monto <= 0:
+            print("El monto debe ser mayor a 0")
+            input("Presione enter para continuar...")
+            return
+            
+        if monto > db[numero_user]['cuentas'][acc_num]:
+            print(f'Saldo insuficiente. Saldo actual: ${db[numero_user]["cuentas"][acc_num]}')
+            input("Presione enter para continuar...")
+            return
+            
+        db[numero_user]['cuentas'][acc_num] -= monto
+        print(f'Retiro exitoso de ${monto}')
+        print(f'Nuevo saldo en cuenta {acc_num}: ${db[numero_user]["cuentas"][acc_num]}')
+        input("Presione enter para continuar...")
+        
+    except ValueError:
+        print("Por favor ingrese valores numericos validos")
+        input("Presione enter para continuar...")
+
+def retiro_cuenta_corriente():
+    os.system('cls')
+    
+    if len(db[numero_user]['cuentas']) == 0:
+        print("No tiene cuentas registradas")
+        input("Presione enter para continuar...")
+        return
+    
+    print("Cuentas corrientes disponibles:")
+    for cuenta, saldo in db[numero_user]['cuentas'].items():
+        if 200 <= cuenta <= 299:
+            print(f"Cuenta: {cuenta} - Saldo: ${saldo}")
+    
+    try:
+        acc_num = int(input('\nIngrese el numero de cuenta corriente: '))
+        
+        if acc_num < 200 or acc_num > 299:
+            print("Numero de cuenta invalido. Las cuentas corrientes son del 200 al 299")
+            input("Presione enter para continuar...")
+            return
+            
+        if acc_num not in db[numero_user]['cuentas'].keys():
+            print(f'La cuenta corriente {acc_num} no existe')
+            input("Presione enter para continuar...")
+            return
+            
+        monto = int(input('Ingrese el monto a retirar: $'))
+        
+        if monto <= 0:
+            print("El monto debe ser mayor a 0")
+            input("Presione enter para continuar...")
+            return
+            
+        if monto > db[numero_user]['cuentas'][acc_num]:
+            print(f'Saldo insuficiente. Saldo actual: ${db[numero_user]["cuentas"][acc_num]}')
+            input("Presione enter para continuar...")
+            return
+            
+        db[numero_user]['cuentas'][acc_num] -= monto
+        print(f'Retiro exitoso de ${monto}')
+        print(f'Nuevo saldo en cuenta {acc_num}: ${db[numero_user]["cuentas"][acc_num]}')
+        input("Presione enter para continuar...")
+        
+    except ValueError:
+        print("Por favor ingrese valores numericos validos")
+        input("Presione enter para continuar...")
+                
+    
+    
+    
 #inicio de programa
 while True:
     try:
@@ -421,13 +520,15 @@ while True:
                         case 4:
                             break
             case 5:
-                match int(menu_retiros()):
-                    case 1:
-                        pass
-                    case 2: 
-                        pass
-                    case 3:
-                        pass
+                filtro_user()
+                while True:
+                    match int(menu_retiros()):
+                        case 1:
+                            retiro_cuenta_ahorro()
+                        case 2: 
+                            retiro_cuenta_corriente()
+                        case 3:
+                            break
             case 6:
                 match int(menu_pago_creditos()):
                     case 1:
