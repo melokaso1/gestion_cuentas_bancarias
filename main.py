@@ -5,7 +5,7 @@ import time
 
 #dict
 db = { 
-    # 7086 : {'cuentas' : {}, 'creditos' : {} }
+    7086 : {'cuentas' : {}, 'creditos' : {} }
 }
 
 #Menus
@@ -467,20 +467,21 @@ def retiro_cuenta_corriente():
         input("Presione enter para continuar...")
         return
     
-    print("Cuentas de ahorro disponibles:")
+    print("Cuentas corrientes disponibles:")
     for cuenta, saldo in db[numero_user]['cuentas'].items():
-        if 100 <= cuenta <= 199:
+        if 200 <= cuenta <= 299:
             print(f"Cuenta: {cuenta} - Saldo: ${saldo}")
     
     acc_num = int(input('\nIngrese el numero de cuenta de ahorros: '))
     
-    if acc_num < 100 or acc_num > 199:
-        print("Numero de cuenta invalido. Las cuentas de ahorro son del 100 al 199")
+    if acc_num < 200 or acc_num > 299:
+        print("Numero de cuenta invalido. Las cuentas corrientes son del 200 al 299")
         input("Presione enter para continuar...")
         return
+    
         
     if acc_num not in db[numero_user]['cuentas'].keys():
-        print(f'La cuenta de ahorros {acc_num} no existe')
+        print(f'La cuenta corriente {acc_num} no existe')
         input("Presione enter para continuar...")
         return
         
@@ -495,6 +496,65 @@ def retiro_cuenta_corriente():
     print(f'Retiro exitoso de ${monto}')
     print(f'Nuevo saldo en cuenta {acc_num}: ${db[numero_user]["cuentas"][acc_num]}')
     input("Presione enter para continuar...")
+
+#pago credito
+def pago_creditos(a, b):
+    os.system('cls')
+    if len(db[numero_user]['creditos']) == 0:
+        print("No tiene creditos registrados")
+        input("Presione enter para continuar...")
+        return
+    
+    print("Creditos a pagar:")
+    for cuenta, saldo in db[numero_user]['creditos'].items():
+        if a <= cuenta <= b:
+            print(f"Cuenta: {cuenta} - Saldo: ${saldo}")
+    
+    credito = int(input('\n Ingrese el numero de credito a pagar: '))
+    
+    os.system('cls')
+    
+    for cuenta, saldo in db[numero_user]['cuentas'].items():
+        if 100 <= cuenta <= 299:
+            print(f"Cuenta: {cuenta} - Saldo: ${saldo}")
+    
+    acc_pago = int(input('Ingrese su numero de cuenta para pagar el credito (Cta ahorros / Cta corriente): '))
+    
+    if acc_pago < 100 or acc_pago > 299:
+        print("Numero de cuenta invalido. Las cuentas de ahorro son del 100 al 199 / Numero de cuenta de corriente son del 200 al 299")
+        input("Presione enter para continuar...")
+        return
+    
+        
+    if acc_pago not in db[numero_user]['cuentas'].keys():
+        print(f'La cuenta de ahorros {acc_pago} no existe')
+        input("Presione enter para continuar...")
+        return
+    
+    monto = int(input('Ingrese el monto a pagar: $'))
+    
+    if monto > db[numero_user]['cuentas'][acc_pago]:
+        print(f'Saldo insuficiente. Saldo actual de la cuenta: ${db[numero_user]["cuentas"][acc_pago]}')
+        input("Presione enter para continuar...")
+        return
+    elif monto > db[numero_user]['creditos'][credito]:
+        print(f' El credito a pagar es menor que el monto ingresado')
+        input("Presione enter para continuar...")
+        return
+    
+    db[numero_user]['cuentas'][acc_pago] -= monto
+    db[numero_user]['creditos'][credito] -= monto
+    print(f'Pago realizado por valor de ${monto}')
+    print(f'Saldo en cuenta {acc_pago}: ${db[numero_user]["cuentas"][acc_pago]}')
+    
+    if db[numero_user]['creditos'][credito] == 0:
+        print(f'Credito {credito} cancelado en su totalidad')
+        del db[numero_user]['creditos'][credito]
+        input('Presione enter para continuar...')
+    else:
+        print(f'Saldo de credito {credito}: ${db[numero_user]["creditos"][credito]}')
+        input('Presione enter para continuar...')
+
 
 #inicio de programa
 while True:
@@ -554,11 +614,11 @@ while True:
                 while True:
                     match int(menu_pago_creditos()):
                         case 1:
-                            pago_credito_libre_inversion()
+                            pago_creditos(1000, 1999)
                         case 2: 
-                            pago_credito_vivienda()
+                            pago_creditos(2000, 2999)
                         case 3:
-                            pago_credito_vehicular()
+                            pago_creditos(3000, 3999)
                         case 4:
                             break
             case 7:
@@ -572,6 +632,9 @@ while True:
                     case 4:
                         pass
             case 8:
+                pass
+            
+            case 9:
                 os.system('cls')
                 break
     except ValueError:
