@@ -563,7 +563,7 @@ def pago_creditos(a, b):
     print("Creditos a pagar:")
     for credito, saldo in db[numero_user]['creditos'].items():
         if a <= credito <= b:
-            print(f"Credito: {cuenta} - Saldo: ${saldo}")
+            print(f"Credito: {credito} - Saldo: ${saldo}")
     
     credito = int(input('\n Ingrese el numero de credito a pagar: '))
     
@@ -612,6 +612,34 @@ def pago_creditos(a, b):
         input('Presione enter para continuar...')
 
 #cancelar una cuenta
+def cancelar_cuenta(a, b, acc):
+    os.system('cls')
+    
+    if len(db[numero_user]['cuentas']) == 0:
+        print('No tiene cuentas asociadas')
+        input("Presione enter para continuar...")
+        return
+    
+    acc_canc = int(input(f'Ingrese su numero de cuenta para cancelar ({acc}): '))
+    
+    if acc_canc not in db[numero_user]['cuentas'].keys():
+        print(f'El número de cuenta {acc_canc} no es válido')
+        input("Presione enter para continuar...")
+        return
+    
+    if not (a <= acc_canc <= b):
+        print(f'El número de cuenta {acc_canc} no es válido para {acc}')
+        input("Presione enter para continuar...")
+        return
+    
+    if db[numero_user]['cuentas'][acc_canc] == 0:
+        del db[numero_user]['cuentas'][acc_canc] 
+        print(f'Cuenta {acc_canc} cancelada con exito')
+        input('Presione enter para continuar...')
+    
+    else:
+        print(f'La cuenta {acc_canc} no se puede cancelar ya que tiene un saldo de ${db[numero_user]["cuentas"][acc_canc]}')
+        input('Presione enter para continuar...')
 
 #historial de movimientos
 def historial_movimientos():
@@ -775,15 +803,17 @@ while True:
                         case 4:
                             break
             case 7:
-                match int(menu_cancelar()):
-                    case 1:
-                        pass
-                    case 2: 
-                        pass
-                    case 3:
-                        pass
-                    case 4:
-                        pass
+                filtro_user()
+                while True:
+                    match int(menu_cancelar()):
+                        case 1:
+                            cancelar_cuenta(100, 199, 'CTA AHORROS')
+                        case 2: 
+                            cancelar_cuenta(200, 299, 'CTA CORRIENTE')
+                        case 3:
+                            cancelar_cuenta(300, 399, 'CDT')
+                        case 4:
+                            break
             case 8:
                 filtro_user()
                 historial_movimientos()
