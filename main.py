@@ -5,8 +5,34 @@ import time
 
 #dict
 db = { 
-    7086 : {'cuentas' : {}, 'creditos' : {} }
+    7086 : {'cuentas' : {}, 'creditos' : {}, 'historial' : {} }
 }
+
+#funcion para obtener fecha y hora actual
+def obtener_fecha_hora():
+    tiempo_actual = time.localtime()
+    dia = tiempo_actual.tm_mday
+    mes = tiempo_actual.tm_mon
+    anio = tiempo_actual.tm_year
+    hora = tiempo_actual.tm_hour
+    minuto = tiempo_actual.tm_min
+    segundo = tiempo_actual.tm_sec
+    return f"{dia:02d}/{mes:02d}/{anio} {hora:02d}:{minuto:02d}:{segundo:02d}"
+
+#funcion para agregar al historial
+def agregar_historial(accion, detalles):
+    fecha_hora = obtener_fecha_hora()
+    # Obtener el siguiente número de historial
+    if len(db[numero_user]['historial']) == 0:
+        siguiente_num = 1
+    else:
+        siguiente_num = max(db[numero_user]['historial'].keys()) + 1
+    
+    db[numero_user]['historial'][siguiente_num] = {
+        'fecha': fecha_hora,
+        'accion': accion,
+        'detalles': detalles
+    }
 
 #Menus
 def menu():
@@ -22,7 +48,8 @@ def menu():
 #5 Retiros de cuentas
 #6 Pagos a creditos
 #7 Cerrar cuenta
-#8 Salir
+#8 Historial de usuario
+#9 Salir
 
 Seleccione una opcion: ''')
     
@@ -110,6 +137,20 @@ def menu_cancelar():
 
 Seleccione una opcion: ''')
     return a
+
+def menu_estadisticas():
+    os.system('cls')
+    a = input('''
+  ESTADISTICAS
+================
+#1 Ingresos
+#2 Gastos
+#3 historial de movimientos
+#4 salir
+
+Seleccione una opcion: ''')
+    return a
+
 #logica
 #funciones logicas
 def registro_user():
@@ -150,8 +191,11 @@ def registro_user():
         'cuentas' : {
         },
         'creditos' : {
-        }
+        },
         
+        'historial' : {
+            
+        }
         }
     print(f'Usuario creado con exito, su numero de usuario es: {acc_num}')
     input('oprima enter para continuar')
@@ -257,6 +301,7 @@ def deposito_ahorros():
             monto = int(input('Ingrese el monto a depositar: $'))
             if monto > 0:
                 db[numero_user]['cuentas'][a] += monto
+                agregar_historial("DEPOSITO AHORROS", f"Depósito de ${monto} en cuenta {a}")
                 print(f'Deposito exitoso de ${monto}')
                 print(f'Nuevo saldo en cuenta {a}: ${db[numero_user]["cuentas"][a]}')
                 input("Presione enter para continuar...")
@@ -290,6 +335,7 @@ def deposito_corriente():
             monto = int(input('Ingrese el monto a depositar: $'))
             if monto > 0:
                 db[numero_user]['cuentas'][a] += monto
+                agregar_historial("DEPOSITO CORRIENTE", f"Depósito de ${monto} en cuenta {a}")
                 print(f'Deposito exitoso de ${monto}')
                 print(f'Nuevo saldo en cuenta {a}: ${db[numero_user]["cuentas"][a]}')
                 input("Presione enter para continuar...")
@@ -326,6 +372,7 @@ def deposito_CDT():
                 v_t = inv + v_g
                 
                 db[numero_user]['cuentas'][a] += v_t
+                agregar_historial("DEPOSITO CDT", f"Depósito de ${v_t} en cuenta {a}")
                 
                 print(f'''Deposito exitoso 
 Su saldo del CDT estimado a 1 año al 12% anual es: {db[numero_user]['cuentas'][a]}''')
@@ -353,12 +400,14 @@ def credito_libre_inv():
         elif len(db[numero_user]['creditos']) < 5:
             if len(db[numero_user]['creditos']) == 0:
                 db[numero_user]['creditos'] = {num_acc : cant}
+                agregar_historial("APROBACION CREDITO", f"Crédito de libre inversión aprobado por ${cant}, número {num_acc}")
                 print(f'El credito fue aprobado, numero de credito: {num_acc}')
                 input('Precione enter para continuar...')
                 time.sleep(1)
                 break
             else:
                 db[numero_user]['creditos'][num_acc] = cant
+                agregar_historial("APROBACION CREDITO", f"Crédito de libre inversión aprobado por ${cant}, número {num_acc}")
                 print(f'El credito fue aprobado, numero de credito: {num_acc}')
                 input('Precione enter para continuar...')
                 time.sleep(1)
@@ -380,12 +429,14 @@ def credito_vivienda():
         elif len(db[numero_user]['creditos']) < 5:
             if len(db[numero_user]['creditos']) == 0:
                 db[numero_user]['creditos'] = {num_acc : cant}
+                agregar_historial("APROBACION CREDITO", f"Crédito de vivienda aprobado por ${cant}, número {num_acc}")
                 print(f'El credito fue aprobado, numero de credito: {num_acc}')
                 input('Precione enter para continuar...')
                 time.sleep(1)
                 break
             else:
                 db[numero_user]['creditos'][num_acc] = cant
+                agregar_historial("APROBACION CREDITO", f"Crédito de vivienda aprobado por ${cant}, número {num_acc}")
                 print(f'El credito fue aprobado, numero de credito: {num_acc}')
                 input('Precione enter para continuar...')
                 time.sleep(1)
@@ -406,12 +457,14 @@ def credito_vehicular():
         elif len(db[numero_user]['creditos']) < 5:
             if len(db[numero_user]['creditos']) == 0:
                 db[numero_user]['creditos'] = {num_acc : cant}
+                agregar_historial("APROBACION CREDITO", f"Crédito vehicular aprobado por ${cant}, número {num_acc}")
                 print(f'El credito fue aprobado, numero de credito: {num_acc}')
                 input('Precione enter para continuar...')
                 time.sleep(1)
                 break
             else:
                 db[numero_user]['creditos'][num_acc] = cant
+                agregar_historial("APROBACION CREDITO", f"Crédito vehicular aprobado por ${cant}, número {num_acc}")
                 print(f'El credito fue aprobado, numero de credito: {num_acc}')
                 input('Precione enter para continuar...')
                 time.sleep(1)
@@ -455,6 +508,7 @@ def retiro_cuenta_ahorro():
         return
         
     db[numero_user]['cuentas'][acc_num] -= monto
+    agregar_historial("RETIRO AHORROS", f"Retiro de ${monto} desde cuenta {acc_num}")
     print(f'Retiro exitoso de ${monto}')
     print(f'Nuevo saldo en cuenta {acc_num}: ${db[numero_user]["cuentas"][acc_num]}')
     input("Presione enter para continuar...")
@@ -493,6 +547,7 @@ def retiro_cuenta_corriente():
         return
         
     db[numero_user]['cuentas'][acc_num] -= monto
+    agregar_historial("RETIRO CORRIENTE", f"Retiro de ${monto} desde cuenta corriente {acc_num}")
     print(f'Retiro exitoso de ${monto}')
     print(f'Nuevo saldo en cuenta {acc_num}: ${db[numero_user]["cuentas"][acc_num]}')
     input("Presione enter para continuar...")
@@ -506,9 +561,9 @@ def pago_creditos(a, b):
         return
     
     print("Creditos a pagar:")
-    for cuenta, saldo in db[numero_user]['creditos'].items():
-        if a <= cuenta <= b:
-            print(f"Cuenta: {cuenta} - Saldo: ${saldo}")
+    for credito, saldo in db[numero_user]['creditos'].items():
+        if a <= credito <= b:
+            print(f"Credito: {cuenta} - Saldo: ${saldo}")
     
     credito = int(input('\n Ingrese el numero de credito a pagar: '))
     
@@ -544,6 +599,7 @@ def pago_creditos(a, b):
     
     db[numero_user]['cuentas'][acc_pago] -= monto
     db[numero_user]['creditos'][credito] -= monto
+    agregar_historial("PAGO CREDITO", f"Pago de ${monto} al crédito {credito}")
     print(f'Pago realizado por valor de ${monto}')
     print(f'Saldo en cuenta {acc_pago}: ${db[numero_user]["cuentas"][acc_pago]}')
     
@@ -555,6 +611,103 @@ def pago_creditos(a, b):
         print(f'Saldo de credito {credito}: ${db[numero_user]["creditos"][credito]}')
         input('Presione enter para continuar...')
 
+#cancelar una cuenta
+
+#historial de movimientos
+def historial_movimientos():
+    os.system('cls')
+    print(f'''
+  HISTORIAL DE MOVIMIENTOS - USUARIO: {numero_user}
+==================================================''')
+    
+    print('\n--- CUENTAS ---')
+    if len(db[numero_user]['cuentas']) == 0:
+        print("No tiene cuentas registradas")
+    else:
+        print("Cuentas de ahorro:")
+        for cuenta, saldo in db[numero_user]['cuentas'].items():
+            if 100 <= cuenta <= 199:
+                print(f"  Cuenta #{cuenta} - Saldo: ${saldo}")
+        
+        print("\nCuentas corrientes:")
+        for cuenta, saldo in db[numero_user]['cuentas'].items():
+            if 200 <= cuenta <= 299:
+                print(f"  Cuenta #{cuenta} - Saldo: ${saldo}")
+        
+        print("\nCDTs:")
+        for cuenta, saldo in db[numero_user]['cuentas'].items():
+            if 300 <= cuenta <= 399:
+                print(f"  CDT #{cuenta} - Valor: ${saldo}")
+    
+    print('\n--- CRÉDITOS ---')
+    if len(db[numero_user]['creditos']) == 0:
+        print("No tiene créditos registrados")
+    else:
+        print("Créditos de libre inversión:")
+        for credito, saldo in db[numero_user]['creditos'].items():
+            if 1000 <= credito <= 1999:
+                print(f"  Crédito #{credito} - Saldo: ${saldo}")
+        
+        print("\nCréditos de vivienda:")
+        for credito, saldo in db[numero_user]['creditos'].items():
+            if 2000 <= credito <= 2999:
+                print(f"  Crédito #{credito} - Saldo: ${saldo}")
+        
+        print("\nCréditos vehiculares:")
+        for credito, saldo in db[numero_user]['creditos'].items():
+            if 3000 <= credito <= 3999:
+                print(f"  Crédito #{credito} - Saldo: ${saldo}")
+    
+    print('\n--- HISTORIAL DE TRANSACCIONES ---')
+    if len(db[numero_user]['historial']) == 0:
+        print("No hay transacciones registradas")
+    else:
+        print(f"{'Fecha/Hora':<20} {'Acción':<25} {'Monto':<10} {'Origen':<15} {'Destino':<15}")
+        print("=" * 85)
+        
+        for num_trans, transaccion in db[numero_user]['historial'].items():
+            fecha = transaccion['fecha']
+            accion = transaccion['accion']
+            detalles = transaccion['detalles']
+            
+            # Extraer información del detalle
+            monto = "$0"
+            origen = "N/A"
+            destino = "N/A"
+            
+            if "$" in detalles:
+                # Buscar monto después del $
+                partes = detalles.split("$")
+                if len(partes) > 1:
+                    monto_parte = partes[1].split()[0]
+                    monto = f"${monto_parte}"
+            
+            if "cuenta" in detalles.lower():
+                if "en cuenta" in detalles.lower():
+                    # Para depósitos
+                    partes = detalles.split("cuenta")
+                    if len(partes) > 1:
+                        destino = f"Cuenta {partes[1].strip()}"
+                        origen = "Depósito"
+                elif "de cuenta" in detalles.lower():
+                    # Para retiros
+                    partes = detalles.split("de cuenta")
+                    if len(partes) > 1:
+                        origen = f"Cuenta {partes[1].strip()}"
+                        destino = "Retiro"
+            elif "crédito" in detalles.lower() or "credito" in detalles.lower():
+                if "pago" in detalles.lower():
+                    origen = "Pago desde cuenta"
+                    destino = "Crédito"
+                else:
+                    origen = "Aprobación"
+                    destino = "Crédito"
+            
+            print(f"{fecha:<20} {accion:<25} {monto:<10} {origen:<15} {destino:<15}")
+    
+    print(f"\nTotal en cuentas: ${sum(db[numero_user]['cuentas'].values())}")
+    print(f"Total en créditos: ${sum(db[numero_user]['creditos'].values())}")
+    input("\nPresione enter para continuar...")
 
 #inicio de programa
 while True:
@@ -632,7 +785,8 @@ while True:
                     case 4:
                         pass
             case 8:
-                pass
+                filtro_user()
+                historial_movimientos()
             
             case 9:
                 os.system('cls')
