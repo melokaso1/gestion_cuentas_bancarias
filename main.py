@@ -174,7 +174,7 @@ def registro_user():
         else:
             acc = False
     
-    db[acc_num] = {
+    db[acc_num] = { #type: ignore
         'nombre': nombre,
         'dni': dni,
         'email': email,
